@@ -22,19 +22,16 @@ public class USBData : MonoBehaviour
     {
         Port = new SerialPort();
         instance = this;
-        Event += Rocket.UpdateData;
+        Event += DataManeger.UpdateData;
     }
-
     private void Update()
     {
- 
         try
         { 
             if (!Port.IsOpen) return;
             if (Port.BytesToRead <= 0) return;
             Data = Port.ReadLine();
             Event(Data);
-            //SendReply();
         }
         catch (Exception e)
         {
@@ -43,18 +40,12 @@ public class USBData : MonoBehaviour
         }
     }
 
-    public void SendReply()
-    {
-        Port.WriteLine("*");
-    }
-
     public void OpenPort()
     {
         Port.PortName = PortnameDropDown.options[PortnameDropDown.value].text;
         Port.BaudRate = int.Parse(BaudRateDropDown.options[BaudRateDropDown.value].text);
         
         Port.Open();
-        SendReply();
     }
 
     public void ClosePort()
