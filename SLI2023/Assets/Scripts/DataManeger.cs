@@ -97,16 +97,17 @@ public class DataManeger : MonoBehaviour
             }
         }
 
-        UIManeger.Instance.UpdateAccel(Quaternion.Inverse(Rocket.instance.TargetRot) * localacceleration);
-        UIManeger.Instance.UpdateTeapotDisplay(Rocket.instance.TargetRot.eulerAngles);
-        UIManeger.Instance.UpdateAltitude(DataManeger.Instance.Altitude);
-        UIManeger.Instance.UpdateElapasedTime(DataManeger.Instance.t);
-        UIManeger.Instance.UpdateGPS(DataManeger.Instance.lat, DataManeger.Instance.lon);
-        DataManeger.Instance.DX = Distance(DataManeger.Instance.lati, DataManeger.Instance.loni, DataManeger.Instance.lat, DataManeger.Instance.loni);
-        DataManeger.Instance.DY = Distance(DataManeger.Instance.lati, DataManeger.Instance.loni, DataManeger.Instance.lati, DataManeger.Instance.lon);
+        UIManeger UIM = UIManeger.Instance;
+        DataManeger DM = DataManeger.Instance;
+        UIM.UpdateAccel(Quaternion.Inverse(Rocket.instance.TargetRot) * localacceleration);
+        UIM.UpdateTeapotDisplay(Rocket.instance.TargetRot.eulerAngles);
+        UIM.UpdateAltitude(DM.Altitude);
+        UIM.UpdateElapasedTime(DM.t);
+        UIM.UpdateGPS(DM.lat, DM.lon);
+        DM.DX = Distance(DM.lati, DM.loni, DM.lat, DM.loni);
+        DM.DY = Distance(DM.lati, DM.loni, DM.lati, DM.lon);
 
-        Rocket.instance.TargetPosition = new Vector3(DataManeger.Instance.DX* Instance.XYScale, DataManeger.Instance.Altitude * DataManeger.Instance.ZScale, DataManeger.Instance.DY * DataManeger.Instance.XYScale);
-
+        Rocket.instance.TargetPosition = new Vector3(DM.DX * DM.XYScale, DM.Altitude * DM.ZScale, DM.DY * DM.XYScale);
     }
 
 

@@ -27,7 +27,7 @@ public class AltitudeDisplay : MonoBehaviour
     {
         slider.value = value / (maxvalue - minvalue);
         ValueDisplay.text =  Mathf.RoundToInt(value).ToString() + "ft";
-        if (value > currentmaxvalue)
+        if (value >= currentmaxvalue)
         {
             currentmaxvalue = value;
             UpdateMax(currentmaxvalue);

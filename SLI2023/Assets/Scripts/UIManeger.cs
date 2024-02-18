@@ -21,6 +21,22 @@ public class UIManeger : MonoBehaviour
         Instance = this;
     }
 
+
+    private void Start()
+    {
+        UpdateGPS(0, 0);
+        UpdateTemp(0);
+        UpdateVel(Vector3.zero);
+        UpdateAccel(Vector3.zero);
+        UpdateAltitude(0);
+        UpdateHumidity(0);
+        UpdatePressure(0);
+        UpdateTeapotDisplay(Vector3.zero);
+        UpdateAccel(Vector3.zero);
+        UpdateElapasedTime(0);
+        UpdateTeapotDisplayDir("N");
+    }
+
     public void UpdateGPS(float lat, float lon)
     {
         GPS.UpdateText(lat.ToString() + "," + lon.ToString());
