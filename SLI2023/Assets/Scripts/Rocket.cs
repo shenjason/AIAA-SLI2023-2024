@@ -10,6 +10,7 @@ public class Rocket : MonoBehaviour
     public Quaternion TargetRot;
     public Vector3 RotationOffset;
     public Vector3 TargetPosition;
+    public ParticleSystem Trail;
  
     // Start is called before the first frame update
     void Awake()
@@ -21,7 +22,13 @@ public class Rocket : MonoBehaviour
     void FixedUpdate()
     {
         transform.position = TargetPosition + Vector3.up * 7.621551f;
-        transform.rotation = TargetRot;
+        transform.eulerAngles = TargetRot.eulerAngles + RotationOffset;
+    }
+
+    public void SetTrailState(bool state)
+    {
+        ParticleSystem.EmissionModule em = Trail.emission;
+        em.enabled = state;
     }
 
 

@@ -48,9 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1491f32743d39548ac43642634c9fae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AD: {fileID: 0}
-  CurrentRotation: {x: 0, y: 0, z: 0}
+  TargetRot: {x: 0, y: 0, z: 0, w: 0}
   RotationOffset: {x: 180, y: 180, z: 180}
+  TargetPosition: {x: 0, y: 0, z: 0}
+  Trail: {fileID: 4040268787035186901}
 --- !u!1 &2622102087108476846
 GameObject:
   m_ObjectHideFlags: 0
