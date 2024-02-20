@@ -1780,7 +1780,7 @@ PrefabInstance:
       objectReference: {fileID: 572084314}
     - target: {fileID: 2622102087108476846, guid: 1623d0a6933596e4fa801afac7bf4636, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3556437277617894417, guid: 1623d0a6933596e4fa801afac7bf4636, type: 3}
       propertyPath: AD
@@ -8434,7 +8434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ZScale: 0.1
-  XYScale: 0.5
+  XYScale: 1
   Latitude: 0
   Longitude: 0
   LatitudeI: -1
