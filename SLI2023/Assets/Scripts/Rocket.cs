@@ -10,7 +10,9 @@ public class Rocket : MonoBehaviour
     public Quaternion TargetRot;
     public Vector3 RotationOffset;
     public Vector3 TargetPosition;
-    public ParticleSystem Trail;
+    public ParticleSystem ThrustPar;
+    public PastLineRender Trail;
+    public float InterpolationSpeed = 30;
  
     // Start is called before the first frame update
     void Awake()
@@ -21,16 +23,28 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position = TargetPosition + Vector3.up * 7.621551f;
-        transform.eulerAngles = TargetRot.eulerAngles + RotationOffset;
+        Vector3 tp = TargetPosition;
+
+        tp.y = Mathf.Abs(tp.y);
+        tp += Vector3.up * 7.621551f;
+
+        Vector3 tr = TargetRot.eulerAngles + RotationOffset;
+        float speed = (InterpolationSpeed * Time.fixedDeltaTime) / (DataManeger.Instance.dt + 1);
+        transform.position = Vector3.Lerp(transform.position, tp, speed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(tr), speed);
     }
 
     public void SetTrailState(bool state)
     {
-        ParticleSystem.EmissionModule em = Trail.emission;
+        ParticleSystem.EmissionModule em = ThrustPar.emission;
         em.enabled = state;
     }
 
+
+    public void ResetTrail()
+    {
+        Trail.ClearLine();
+    }
 
 
 

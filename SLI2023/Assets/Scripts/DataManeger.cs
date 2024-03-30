@@ -7,8 +7,7 @@ public class DataManeger : MonoBehaviour
     public static DataManeger Instance;
     [Header("Const")]
 
-    public float ZScale = 0.1f;
-    public float XYScale = 0.5f;
+    public float Scale = 0.5f;
 
     [Header("Data")]
     public float Latitude = 0;
@@ -18,12 +17,17 @@ public class DataManeger : MonoBehaviour
     public float Tempature = 0;
     public float Pressure = 0;
     public float Humidity = 0;
-    public float pt = -1;
     public float Altitude = 0;
     public float AltitudeI = -1;
     public float t = 0;
     public float DX = 0;
     public float DY = 0;
+    public float DA = 0;
+    public float dt = 0;
+    [HideInInspector] public float pDY = 0;
+    [HideInInspector] public float pDX = 0;
+    [HideInInspector] public float pDA = 0;
+    [HideInInspector] public float pt = -1;
 
 
     private void Awake()
@@ -61,11 +65,11 @@ public class DataManeger : MonoBehaviour
             }
             if (d.StartsWith("gy"))
             {
-                Rocket.instance.TargetRot.z = float.Parse(data);
+                Rocket.instance.TargetRot.y = float.Parse(data);
             }
             if (d.StartsWith("gz"))
             {
-                Rocket.instance.TargetRot.y = float.Parse(data);
+                Rocket.instance.TargetRot.z = float.Parse(data);
             }
             if (d.StartsWith("gw"))
             {
@@ -113,10 +117,10 @@ public class DataManeger : MonoBehaviour
             }
             if (d.StartsWith("al"))
             {
-                DataManeger.Instance.Altitude = float.Parse(data);
+                DataManeger.Instance.Altitude = float.Parse(data) * 3.2808399f;
                 if (DataManeger.Instance.AltitudeI == -1)
                 {
-                    DataManeger.Instance.AltitudeI = float.Parse(data);
+                    DataManeger.Instance.AltitudeI = float.Parse(data) * 3.2808399f;
                 }
             }
         }
@@ -124,22 +128,50 @@ public class DataManeger : MonoBehaviour
         UIManeger UIM = UIManeger.Instance;
         DataManeger DM = DataManeger.Instance;
 
-        Vector3 globalAcceleration = Quaternion.Inverse(Rocket.instance.TargetRot) * localacceleration;
+        Vector3 globalAcceleration = Quaternion.Inverse(Rocket.instance.TargetRot) * localacceleration * 3.2808398950131f;
 
-        UIM.UpdateAccel(globalAcceleration);
-        Rocket.instance.SetTrailState((globalAcceleration.z > 4));
+        UIM.UpdateAccel(globalAcceleration);    
+        Rocket.instance.SetTrailState((globalAcceleration.z > 200));
         UIM.UpdateTeapotDisplay(Rocket.instance.TargetRot.eulerAngles);
+        
         UIM.UpdateAltitude(DM.Altitude-DM.AltitudeI);
-        UIM.UpdateElapasedTime(DM.t - DM.pt);
+        UIM.UpdateElapasedTime(DM.t);
+        
         UIM.UpdateGPS(DM.Latitude, DM.Longitude);
-        DM.DX = Distance(DM.LatitudeI, DM.LongitudeI, DM.Latitude, DM.LongitudeI);
-        DM.DY = Distance(DM.LatitudeI, DM.LongitudeI, DM.LatitudeI, DM.Longitude);
+        
+        DM.pDX = DM.DX;
+        DM.pDY = DM.DY;
+
+        int mdx = -1;
+        int mdy = -1;
+        if (DM.Latitude > DM.LatitudeI)
+        {
+            mdx = 1;
+        }
+        if (DM.Longitude > DM.LongitudeI)
+        {
+            mdy = 1;
+        }
+
+        DM.DX = mdx * Distance(DM.LatitudeI, DM.LongitudeI, DM.Latitude, DM.LongitudeI);
+        DM.DY = mdy * Distance(DM.LatitudeI, DM.LongitudeI, DM.LatitudeI, DM.Longitude);
+
+
+        float dx = DM.DX - DM.pDX;
+        float dy = DM.DY - DM.pDY;
+        float dz = DM.DA - DM.pDA;
+        DM.dt = DM.t - DM.pt;
+
+        UIM.UpdateVel(new Vector3(dx/DM.dt, dy/DM.dt, dz/DM.dt));
+
+
         UIM.UpdateHumidity(DM.Humidity);
         UIM.UpdateTemp(DM.Tempature);
         UIM.UpdatePressure(DM.Pressure);
+        UIM.UpdateDXDY(DM.DX, DM.DY);
 
 
-        Rocket.instance.TargetPosition = new Vector3(DM.DX * DM.XYScale, (DM.Altitude - DM.AltitudeI) * DM.ZScale, DM.DY * DM.XYScale);
+        Rocket.instance.TargetPosition = new Vector3(DM.DX * DM.Scale, (DM.Altitude - DM.AltitudeI) * DM.Scale, DM.DY * DM.Scale);
     }
 
 
@@ -152,6 +184,8 @@ public class DataManeger : MonoBehaviour
         float dlon = (lon2 - lon1) * Mathf.Deg2Rad;
         float a = Mathf.Pow(Mathf.Sin(dlat / 2), 2) + Mathf.Cos(lat1r) * Mathf.Cos(lat2r) * Mathf.Pow(Mathf.Sin(dlon / 2), 2);
         float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
+
+
         return R * c;
     }
 
@@ -160,6 +194,7 @@ public class DataManeger : MonoBehaviour
         AltitudeI = Altitude;
         LatitudeI = Latitude;
         LongitudeI = Longitude;
-        pt = t;
+        Rocket.instance.transform.position = Vector3.zero + Vector3.up * 7.621551f;
+        Rocket.instance.ResetTrail();
     }
 }

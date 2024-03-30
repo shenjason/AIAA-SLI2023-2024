@@ -49,9 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetRot: {x: 0, y: 0, z: 0, w: 0}
-  RotationOffset: {x: 180, y: 180, z: 180}
+  RotationOffset: {x: -90, y: 0, z: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  Trail: {fileID: 4040268787035186901}
+  ThrustPar: {fileID: 4040268787035186901}
+  Trail: {fileID: 6538085137704551020}
+  InterpolationSpeed: 1
 --- !u!1 &2622102087108476846
 GameObject:
   m_ObjectHideFlags: 0
@@ -5166,19 +5168,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 79a2fbaa9a69d55469a633b597aa67ac, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70710665
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 79a2fbaa9a69d55469a633b597aa67ac, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.70710695
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 79a2fbaa9a69d55469a633b597aa67ac, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000003884458
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 79a2fbaa9a69d55469a633b597aa67ac, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000034975463
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 79a2fbaa9a69d55469a633b597aa67ac, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

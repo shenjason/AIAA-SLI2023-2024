@@ -5,11 +5,14 @@ using UnityEngine;
 public class NumberLabeler : MonoBehaviour
 {
     public GameObject Numberlabel;
-    public float spacing = 30;
-    public float increament = 300;
+    private float spacing = 30;
+    private float increament = 300;
     // Start is called before the first frame update
+
     void Start()
     {
+        increament = Mathf.Round(spacing * DataManeger.Instance.Scale);   
+
         for (int i = 1; i < 100; i++)
         {
             TextMesh mesh = Instantiate(Numberlabel, new Vector3(i * spacing, 4.5f, 0), Quaternion.identity, gameObject.transform).GetComponent<TextMesh>();

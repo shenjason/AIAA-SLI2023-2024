@@ -21,4 +21,9 @@ public class PastLineRender : MonoBehaviour
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
     }
+
+    public void ClearLine()
+    {
+        lineRenderer.SetPositions(new Vector3[0]);
+    }
 }

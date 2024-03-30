@@ -15,6 +15,8 @@ public class UIManeger : MonoBehaviour
     public TextDisplay Pressure;
     public TextDisplay Temp;
     public TextDisplay Humidity;
+    public TextDisplay DeltaX;
+    public TextDisplay DeltaY;
 
     private void Awake()
     {
@@ -83,9 +85,44 @@ public class UIManeger : MonoBehaviour
 
     public void UpdateTeapotDisplay(Vector3 Rot)
     {
-        TeapotDisplay.UpdateText("X:" + Rot.x.ToString() + " Y:" + Rot.y.ToString() + " Z:" + Rot.z.ToString());
+        TeapotDisplay.UpdateText("X:" + Mathf.RoundToInt(Rot.x).ToString() + " Y:" + Mathf.RoundToInt(Rot.y).ToString() + " Z:" + Mathf.RoundToInt(Rot.z).ToString());
+        float AbsRot = Rot.y - 22.5f;
+        string dir = "NE";
+        if (AbsRot > -22.5 && AbsRot < 22.5)
+        {
+            dir = "E";
+        }else if (AbsRot > 22.5 && AbsRot < 67.5)
+        {
+            dir = "SE";
+        }else if (AbsRot > 67.5 && AbsRot < 112.5)
+        {
+            dir = "S";
+        }
+        else if (AbsRot > 112.5 && AbsRot < 157.5)
+        {
+            dir = "SW";
+        }
+        else if (AbsRot > 157.5 && AbsRot < 202.5)
+        {
+            dir = "W";
+        }
+        else if (AbsRot > 202.5 && AbsRot < 247.5)
+        {
+            dir = "NW";
+        }
+        else if (AbsRot > 247.5 && AbsRot < 292.5)
+        {
+            dir = "N";
+        }
+
+        UpdateTeapotDisplayDir(dir);
+
     }
 
-
+    public void UpdateDXDY(float dx, float dy)
+    {
+        DeltaX.UpdateText(Mathf.RoundToInt(dx).ToString() + "ft");
+        DeltaY.UpdateText(Mathf.RoundToInt(dy).ToString() + "ft");
+    }
 
 }
