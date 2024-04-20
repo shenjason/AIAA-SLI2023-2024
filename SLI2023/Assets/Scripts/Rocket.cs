@@ -17,6 +17,7 @@ public class Rocket : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        TargetRot = Quaternion.identity;
         instance = this;
     }
 
@@ -25,13 +26,12 @@ public class Rocket : MonoBehaviour
     {
         Vector3 tp = TargetPosition;
 
-        tp.y = Mathf.Abs(tp.y);
+        tp.y = Mathf.Max(tp.y, 0);
         tp += Vector3.up * 7.621551f;
 
-        Vector3 tr = TargetRot.eulerAngles + RotationOffset;
-        float speed = (InterpolationSpeed * Time.fixedDeltaTime) / (DataManeger.Instance.dt + 1);
+        float speed = InterpolationSpeed * Time.fixedDeltaTime;
         transform.position = Vector3.Lerp(transform.position, tp, speed);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(tr), speed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(RotationOffset) *  TargetRot, speed);
     }
 
     public void SetTrailState(bool state)

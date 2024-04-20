@@ -9,16 +9,24 @@ public class Gauge : MonoBehaviour
     public TextDisplay Z;
     public TextDisplay GaugeDisplay;
     public RectTransform Needle;
+    public float startAngle = 0;
+    public float endAngle = 360;
     public float minvalue = 0;
     public float maxvalue = 0;
     public string DisplayUnit;
 
+    public void Start()
+    {
+        SetNeedle(0);
+    }
 
     public void SetNeedle(float value)
     {
         GaugeDisplay.UpdateText(Mathf.RoundToInt(value).ToString() + DisplayUnit);
 
-        Needle.eulerAngles = new Vector3(0, 0, -360 * (value / (maxvalue - minvalue)));
+        float scale = Mathf.Clamp((value / (maxvalue - minvalue)), 0, 1);
+
+        Needle.eulerAngles = new Vector3(0, 0, -(endAngle - startAngle) * scale - startAngle);
     }
 
 

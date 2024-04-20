@@ -24,6 +24,6 @@ public class PastLineRender : MonoBehaviour
 
     public void ClearLine()
     {
-        lineRenderer.SetPositions(new Vector3[0]);
+        lineRenderer.Clear();
     }
 }

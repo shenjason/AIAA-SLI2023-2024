@@ -49,6 +49,8 @@ public class DataManeger : MonoBehaviour
         string[] RealData = Data.Split(',');
 
         Vector3 localacceleration = Vector3.zero;
+
+        Quaternion newRot = Quaternion.identity;
         
 
 
@@ -61,19 +63,19 @@ public class DataManeger : MonoBehaviour
             }
             if (d.StartsWith("gx"))
             {
-                Rocket.instance.TargetRot.x = float.Parse(data);
+                newRot.x = float.Parse(data);
             }
             if (d.StartsWith("gy"))
             {
-                Rocket.instance.TargetRot.y = float.Parse(data);
+                newRot.y = float.Parse(data);
             }
             if (d.StartsWith("gz"))
             {
-                Rocket.instance.TargetRot.z = float.Parse(data);
+                newRot.z = float.Parse(data);
             }
             if (d.StartsWith("gw"))
             {
-                Rocket.instance.TargetRot.w = float.Parse(data);
+                newRot.w = float.Parse(data);
             }
             if (d.StartsWith("ax"))
             {
@@ -126,13 +128,18 @@ public class DataManeger : MonoBehaviour
         }
 
         UIManeger UIM = UIManeger.Instance;
-        DataManeger DM = DataManeger.Instance;
+        DataManeger DM = Instance;
 
-        Vector3 globalAcceleration = Quaternion.Inverse(Rocket.instance.TargetRot) * localacceleration * 3.2808398950131f;
+        newRot =  new Quaternion(Mathf.Sin(Mathf.PI/4), 0, 0, Mathf.Cos(Mathf.PI/4)) * newRot;
+        newRot.z = -newRot.z;
+
+        Rocket.instance.TargetRot = newRot;
+
+        Vector3 globalAcceleration =  localacceleration * 3.2808398950131f;
 
         UIM.UpdateAccel(globalAcceleration);    
-        Rocket.instance.SetTrailState((globalAcceleration.z > 200));
-        UIM.UpdateTeapotDisplay(Rocket.instance.TargetRot.eulerAngles);
+        Rocket.instance.SetTrailState((globalAcceleration.z > 20));
+        UIM.UpdateTeapotDisplay(newRot.eulerAngles);
         
         UIM.UpdateAltitude(DM.Altitude-DM.AltitudeI);
         UIM.UpdateElapasedTime(DM.t);
@@ -196,5 +203,17 @@ public class DataManeger : MonoBehaviour
         LongitudeI = Longitude;
         Rocket.instance.transform.position = Vector3.zero + Vector3.up * 7.621551f;
         Rocket.instance.ResetTrail();
+        int mdx = -1;
+        int mdy = -1;
+        if (Latitude > LatitudeI)
+        {
+            mdy = 1;
+        }
+        if (Longitude > LongitudeI)
+        {
+            mdx = 1;
+        }
+        DY = mdy * Distance(LatitudeI, LongitudeI, Latitude, LongitudeI);
+        DX = mdx * Distance(LatitudeI, LongitudeI, LatitudeI, Longitude);
     }
 }
